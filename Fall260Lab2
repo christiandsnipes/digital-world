@@ -1,0 +1,277 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL ; 
+USE IEEE.STD_LOGIC_UNSIGNED.ALL ; 
+
+
+entity Lab2 is
+
+PORT(
+		clk         : IN      STD_LOGIC ; -- clk
+		reset_l     : IN      STD_LOGIC ; -- reset button
+		--x           : IN      STD_LOGIC ;
+		--seg   : OUT STD_LOGIC_VECTOR (7 DOWNTO 0) ; 
+        led		: OUT STD_LOGIC -- number display driver -- anode
+	) ; 
+end Lab2;
+
+ARCHITECTURE Moore of Lab2 is 
+
+COMPONENT LSFR
+PORT(clk,reset_l_sync  : IN  STD_LOGIC;        
+    serialout: OUT STD_LOGIC) ;    
+END COMPONENT ; 
+
+TYPE states IS (s0, s1, s2, s3, s4, s5, s6, s7,
+                s8, s9, s10, s11, s12, s13, s14, 
+                s15, s16, s17, s18, s19, s20, s21, 
+                s22, s23, s24, s25, s26, s27, s28,
+                s29, s30, s31, s32, s33) ; --all of the states that the FSM will process through
+SIGNAL state: states := s0;
+SIGNAL nxt_state : states := s0;
+SIGNAL x: STD_LOGIC ;
+SIGNAL reset_l_tmp  : STD_LOGIC ;    
+SIGNAL reset_l_sync : STD_LOGIC ;
+--SIGNAL f    : STD_LOGIC_VECTOR (32 DOWNTO 0) := "000000000000000000000000000000000" ;
+
+BEGIN
+        clkd: PROCESS (clk)
+        BEGIN
+		IF (clk = '1' and clk'EVENT) THEN 
+			IF (reset_l_sync <= '0') THEN 
+			     state <= s0;
+			ELSE 
+			 state <= nxt_state;
+			END IF;
+	    END IF;
+	END PROCESS clkd;
+
+   sourceLSFR: LSFR        
+        PORT MAP (clk      => clk,                  
+                  reset_l_sync      => reset_l_sync,                
+                  serialout => x) ;
+
+state_trans: PROCESS (x, state)
+BEGIN
+    nxt_state <= state ;
+    CASE state IS
+        WHEN s0 => IF (x = '1') THEN --if x is a zero, the FSM transitions to s1
+            nxt_state <= s1;
+                    END IF ;
+                    
+        WHEN s1 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s2; --x can only be a 1 or 0, therefore, it must be a zero; if x is a zero, the FSM transitions to s2
+                    END IF ;
+                    
+        WHEN s2 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s3; --if x is a zero, the FSM transitions to s3
+                    END IF ;
+                    
+        WHEN s3 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s4; --if x is a zero, the FSM transitions to s4
+                    END IF ;
+                    
+        WHEN s4 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s5; --if x is a zero, the FSM transitions to s5
+                    END IF ;
+                    
+        WHEN s5 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s6; --if x is a zero, the FSM transitions to s6
+                    END IF ;
+                    
+        WHEN s6 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s7; --if x is a zero, the FSM transitions to s7
+                    END IF ;
+                    
+        WHEN s7 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s8; --if x is a zero, the FSM transitions to s8
+                    END IF ;
+                    
+        WHEN s8 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s9; --if x is a zero, the FSM transitions to s9
+                    END IF ;
+                    
+        WHEN s9 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s10; --if x is a zero, the FSM transitions to s10
+                    END IF ;
+                    
+        WHEN s10 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s11; --if x is a zero, the FSM transitions to s11
+                    END IF ;
+                    
+        WHEN s11 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s12; --if x is a zero, the FSM transitions to s12
+                    END IF ;
+                    
+        WHEN s12 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s13; --if x is a zero, the FSM transitions to s13
+                    END IF ;
+                    
+        WHEN s13 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s14; --if x is a zero, the FSM transitions to s14
+                    END IF ;
+        
+        WHEN s14 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s15; ----if x is a zero, the FSM transitions to s15
+                    END IF ;
+        
+        WHEN s15 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s16;  --if x is a zero, the FSM transitions to s16
+                    END IF ;
+        
+        WHEN s16 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s17; --if x is a zero, the FSM transitions to s17
+                    END IF ;
+        
+        WHEN s17 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s18; --if x is a zero, the FSM transitions to s18
+                    END IF ;
+        
+        WHEN s18 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s19; --if x is a zero, the FSM transitions to s19
+                    END IF ;
+        
+        WHEN s19 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s20; --if x is a zero, the FSM transitions to s20
+                    END IF ;
+        
+        WHEN s20 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s21; --if x is a zero, the FSM transitions to s21
+                    END IF ;
+        
+        WHEN s21 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s22; --if x is a zero, the FSM transitions to s22
+                    END IF ;
+        
+        WHEN s22 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s23; --if x is a zero, the FSM transitions to s23
+                    END IF ;
+        
+        WHEN s23 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s24; --if x is a zero, the FSM transitions to s24
+                    END IF ;
+        
+        WHEN s24 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s25; --if x is a zero, the FSM transitions to s25
+                    END IF ;
+        
+        WHEN s25 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s26; --if x is a zero, the FSM transitions to s26
+                    END IF ;
+        
+        WHEN s26 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s27; --if x is a zero, the FSM transitions to s27
+                    END IF ;
+        
+        WHEN s27 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s28; --if x is a zero, the FSM transitions to s28
+                    END IF ;
+        
+        WHEN s28 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s29; --if x is a zero, the FSM transitions to s29
+                    END IF ;
+        
+        WHEN s29 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s30; --if x is a zero, the FSM transitions to s30
+                    END IF ;
+        
+        WHEN s30 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s31; --if x is a zero, the FSM transitions to s31
+                    END IF ;
+        
+        WHEN s31 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s32; --if x is a zero, the FSM transitions to s32
+                    END IF ;
+                    
+        WHEN s32 => IF (x = '1') THEN --if x is a one, the FSM transitions back to to s0
+            nxt_state <= s1;
+                    ELSE 
+            nxt_state <= s33; --if x is a zero, the FSM transitions to s33
+                    END IF ;
+                    
+        WHEN s33 => IF (x = '1' OR x = '0') THEN
+            nxt_state <= s33;                    --if x is a zero or one, the FSM remains at s33
+                    ELSE IF (reset_l = '0') THEN
+            nxt_state <= s0;                     --if reset_l is asserted, the FSM loops back to s0
+                    END IF ;
+                    END IF ;
+       END CASE;
+       
+END PROCESS state_trans;
+
+PROCESS(clk)    
+BEGIN         
+    IF (clk'event AND clk = '1') THEN            
+        reset_l_tmp  <= reset_l ;            
+        reset_l_sync <= reset_l_tmp ;         
+    END IF ;    
+END PROCESS ;    
+    
+    led <= '1' WHEN (state = s33) ELSE '0';    --the led turns on when the state reaches s33
+      
+    
+END Moore;
+
+
